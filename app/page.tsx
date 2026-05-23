@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa";
 import { getTopAnime } from "@/services/api";
 import Link from "next/link";
@@ -41,6 +41,13 @@ interface Anime {
 }
 
 export default function Home() {
+    return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+function HomeContent() {
   const [apiAnime, setApiAnime] =
     useState<Anime[]>([]);
 
