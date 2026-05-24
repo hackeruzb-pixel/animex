@@ -113,28 +113,26 @@ function HomeContent() {
 
   /* ================= API ================= */
 
-
-
   /* ================= FIREBASE ================= */
 
- useEffect(() => {
-  const unsub = onSnapshot(animeRef, (snapshot) => {
-    const data = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Anime[];
+  useEffect(() => {
+    const unsub = onSnapshot(animeRef, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Anime[];
 
-    setFirebaseAnime(data);
+      setFirebaseAnime(data);
 
-    setLoading(false);
-  });
+      setLoading(false);
+    });
 
-  return () => unsub();
-}, []);
+    return () => unsub();
+  }, []);
 
   /* ================= MERGE ================= */
 
-const allAnime = firebaseAnime;
+  const allAnime = firebaseAnime;
   /* ================= SEARCH ================= */
 
   const filteredAnime = allAnime.filter((item) =>
