@@ -42,8 +42,7 @@ export default function ProfilePage() {
 
   const [user, setUser] = useState<any>(null);
   const [data, setData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState(true);
-
+ const [checking, setChecking] = useState(true);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
       if (!u) {
@@ -61,7 +60,7 @@ export default function ProfilePage() {
         setData(snap.data() as UserData);
       }
 
-      setLoading(false);
+      setChecking(false);
     });
 
     return () => unsub();
@@ -74,7 +73,7 @@ export default function ProfilePage() {
   };
 
   // LOADING
-  if (loading) {
+  if (checking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white text-3xl font-black">
         Loading...
@@ -101,9 +100,8 @@ export default function ProfilePage() {
       >
 
         {/* TOP BANNER */}
-        <div
-          className={`relative h-64 flex items-center justify-center overflow-hidden
-
+     <div
+  className={`relative min-h-[420px] md:min-h-[500px] flex items-center justify-center overflow-hidden
           ${
             data?.role === "owner"
               ? "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600"

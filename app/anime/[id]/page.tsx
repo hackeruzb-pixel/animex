@@ -23,7 +23,9 @@ interface Anime {
   synopsis?: string;
   score?: number;
   status?: string;
-  genres?: any;
+  genre?: string | string[] | { name: string }[]; // 👈 qo‘shildi
+  genres?: string | string[] | { name: string }[];
+   year?: number;
   episodeList?: Episode[];
 }
 
@@ -83,29 +85,32 @@ export default function AnimePage() {
   const description =
     anime.description || anime.synopsis || "No description available";
 
-  const rating = anime.score ?? 0;
+const rating =
+  typeof anime.score === "number"
+    ? anime.score
+    : parseFloat(anime.score as any) || 0;
 
   /* ================= GENRES FIX ================= */
 
-  const genres: string[] = (() => {
-    const g = anime.genres;
+const genres: string[] = (() => {
+  const g = anime?.genres || anime?.genre; // 👈 fallback qo‘shildi
 
-    if (!g) return [];
+  if (!g) return [];
 
-    if (Array.isArray(g)) {
-      return [...new Set(
+  if (Array.isArray(g)) {
+    return Array.from(
+      new Set(
         g.map((x: any) => (typeof x === "string" ? x : x?.name))
-          .filter(Boolean)
-      )];
-    }
+      )
+    ).filter(Boolean);
+  }
 
-    if (typeof g === "string") {
-      return g.split(",").map((x) => x.trim()).filter(Boolean);
-    }
+  if (typeof g === "string") {
+    return g.split(",").map((x) => x.trim()).filter(Boolean);
+  }
 
-    return [];
-  })();
-
+  return [];
+})();
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#05070f] via-[#0b1220] to-black text-white">
 
@@ -171,7 +176,7 @@ export default function AnimePage() {
 
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
               <FaStar className="text-yellow-400" />
-              <span>{rating.toFixed(1)}</span>
+             <span>{rating ? rating.toFixed(1) : "0.0"}</span>
             </div>
 
             <div className="px-4 py-2 rounded-xl bg-green-500/10 text-green-300 border border-green-500/20">
