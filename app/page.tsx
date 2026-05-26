@@ -443,7 +443,7 @@ function HomeContent() {
                         {/* BUTTON */}
                         <button
                           className="
-          w-full
+                        w-full
 
           py-3.5
 

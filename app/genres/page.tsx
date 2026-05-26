@@ -172,10 +172,10 @@ export default function GenresPage() {
                 <div className="border-t border-white/10 my-6" />
 
                 {/* LINK */}
-                <Link
-                  href={`/genres/${genre.slug}`}
-                  className="flex justify-between items-center group/link"
-                >
+            <Link
+  href={`/animelar?genre=${genre.slug}`}
+  className="flex justify-between items-center group/link"
+>
                   <span className="font-medium">
                     Ko‘rish
                   </span>

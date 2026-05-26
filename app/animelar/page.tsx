@@ -90,46 +90,104 @@ export default function AnimePage() {
       </section>
 
       {/* GRID */}
-      <section className="max-w-7xl mx-auto px-6 mt-10 pb-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-
-          {filteredAnime.map((anime) => (
+    {/* GRID */}
+<section className="max-w-7xl mx-auto px-6 mt-10 pb-20">
+  {animeList.length === 0 ? (
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div
+          key={i}
+          className="h-[380px] rounded-3xl bg-gray-900 animate-pulse"
+        />
+      ))}
+    </div>
+  ) : (
+    <>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
+        {filteredAnime.map((item) => (
+          <div key={item.id} className="group">
+            {/* CARD */}
             <div
-              key={anime.id}
-              className="group bg-[#111111] rounded-[28px] overflow-hidden border border-white/10 hover:border-red-500/30 hover:-translate-y-2 transition-all duration-300"
+              className="
+              relative aspect-[2/3]
+              rounded-[2.5rem]
+              overflow-hidden
+              bg-[#050505]
+              border border-white/10
+              shadow-[0_15px_70px_rgba(0,0,0,0.9)]
+              transition-all duration-700
+              hover:scale-[1.04]
+              hover:-translate-y-3
+              hover:shadow-[0_35px_120px_rgba(255,0,120,0.25)]
+            "
             >
+              {/* IMAGE */}
+              <img
+                src={item.image}
+                className="
+                  w-full h-full object-cover
+                  group-hover:scale-110
+                  transition duration-700
+                "
+              />
 
-              <div className="overflow-hidden">
-                <img
-                  src={anime.image}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
-                />
+              {/* DARK OVERLAY */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+              {/* GLOW */}
+              <div className="absolute -inset-[120px] opacity-0 group-hover:opacity-100 transition duration-700 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-cyan-500/20 blur-[120px]" />
+
+              {/* YEAR BADGE */}
+              <div className="absolute top-4 right-4 px-3 py-1 rounded-xl bg-black/50 backdrop-blur-xl border border-white/10 text-[10px] font-bold tracking-widest">
+                2026
               </div>
 
-              <div className="p-4">
-                <h3 className="font-bold text-lg line-clamp-1">
-                  {anime.title}
-                </h3>
-
-                <div className="flex justify-between text-gray-400 text-sm mt-3">
-                  <span>{anime.genre}</span>
-
-                  <span className="text-yellow-400">
-                    ⭐ {anime.rating}
+              {/* CONTENT */}
+              <div className="absolute bottom-0 left-0 right-0 p-5 z-20">
+                {/* INFO */}
+                <div className="flex items-center gap-2 mb-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition duration-500">
+                  <span className="text-white/20">|</span>
+                  <span className="text-white/60 text-xs uppercase tracking-widest">
+                    {item.title}
                   </span>
                 </div>
+
+                {/* BUTTON */}
+                <button className="
+                  w-full py-3 rounded-2xl
+                  bg-white/90 text-black font-black text-sm
+                  opacity-0 group-hover:opacity-100
+                  translate-y-6 group-hover:translate-y-0
+                  transition duration-500
+                  hover:bg-gradient-to-r hover:from-pink-500 hover:to-red-500 hover:text-white
+                ">
+                  ▶ WATCH NOW
+                </button>
               </div>
             </div>
-          ))}
 
-        </div>
+            {/* TITLE */}
+            <h3 className="
+              mt-3 text-white font-bold text-sm sm:text-lg
+              line-clamp-2
+              group-hover:text-pink-500
+              transition
+            ">
+              {item.title}
+            </h3>
+          </div>
+        ))}
+      </div>
 
-        {filteredAnime.length === 0 && (
-          <p className="text-center text-gray-500 mt-14 text-lg">
-            Anime topilmadi 😢
-          </p>
-        )}
-      </section>
+      {/* EMPTY STATE */}
+      {filteredAnime.length === 0 && (
+        <p className="text-center text-gray-500 mt-14 text-lg">
+          Anime topilmadi 😢
+        </p>
+      )}
+    </>
+  )}
+</section>
     </div>
   );
 }

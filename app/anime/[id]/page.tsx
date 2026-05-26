@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { FaPlay, FaStar, FaArrowLeft, FaRegPlayCircle } from "react-icons/fa";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-
+import SmartImage from "@/components/SmartImage";
 /* ================= TYPES ================= */
 
 type Episode = {
@@ -79,16 +79,15 @@ export default function AnimePage() {
       </main>
     );
   }
-
-  const image = anime.image || "/placeholder.jpg";
-
+const image = anime?.image?.trim() || "/img/Twitter.jpg";
+console.log("IMAGE:", image);
   const description =
     anime.description || anime.synopsis || "No description available";
 
 const rating =
-  typeof anime.score === "number"
-    ? anime.score
-    : parseFloat(anime.score as any) || 0;
+  typeof (anime as any).rating === "number"
+    ? (anime as any).rating
+    : parseFloat((anime as any).rating) || 0;
 
   /* ================= GENRES FIX ================= */
 
@@ -129,41 +128,43 @@ const genres: string[] = (() => {
       <section className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-2 gap-12 items-start">
 
         {/* VIDEO / IMAGE HERO */}
-        <div className="relative group">
+       <div className="relative group">
 
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl rounded-3xl" />
+  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl rounded-3xl" />
 
-          {!playHero && anime.videoUrl ? (
-            <div
-              onClick={() => setPlayHero(true)}
-              className="relative cursor-pointer"
-            >
-              <img
-                src={image}
-                className="w-full h-[520px] object-cover rounded-3xl border border-white/10 shadow-2xl"
-              />
+  {!playHero && anime.videoUrl ? (
+    <div
+      onClick={() => setPlayHero(true)}
+      className="relative cursor-pointer"
+    >
+      <SmartImage
+        src={image}
+        alt={anime.title}
+        className="w-full h-[520px] object-cover rounded-3xl border border-white/10 shadow-2xl"
+      />
 
-              {/* PLAY OVERLAY */}
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-3xl">
-                <FaPlay className="text-6xl text-white hover:scale-110 transition" />
-              </div>
-            </div>
-          ) : anime.videoUrl ? (
-            <video
-              src={anime.videoUrl}
-              controls
-              autoPlay
-              className="w-full h-[520px] object-cover rounded-3xl border border-white/10 shadow-2xl"
-            />
-          ) : (
-            <img
-              src={image}
-              className="w-full h-[520px] object-cover rounded-3xl border border-white/10 shadow-2xl"
-            />
-          )}
+      <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-3xl">
+        <FaPlay className="text-6xl text-white hover:scale-110 transition" />
+      </div>
+    </div>
+  ) : (
+    <SmartImage
+      src={image}
+      alt={anime.title}
+      className="w-full h-[520px] object-cover rounded-3xl border border-white/10 shadow-2xl"
+    />
+  )}
 
-        </div>
+  {playHero && anime.videoUrl && (
+    <video
+      src={anime.videoUrl}
+      controls
+      autoPlay
+      className="w-full h-[520px] object-cover rounded-3xl border border-white/10 shadow-2xl"
+    />
+  )}
 
+</div>
         {/* INFO */}
         <div className="space-y-6">
 

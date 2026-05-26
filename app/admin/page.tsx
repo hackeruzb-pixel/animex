@@ -52,8 +52,8 @@ export default function AdminPage() {
   const router = useRouter();
 
   const [active, setActive] = useState<
-    'add' | 'edit' | 'episode' | 'users' | null
-  >(null);
+  'add' | 'edit' | 'episode' | 'users' | 'vip_requests' | null
+>(null);
 
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
@@ -81,9 +81,8 @@ const [uploading, setUploading] = useState(false);
   const [animeList, setAnimeList] = useState<Anime[]>([]);
 const [userSearch, setUserSearch] = useState("");
   const [users, setUsers] = useState<UserType[]>([]);
-
+const [vip_requests, setVipRequests] = useState<any[]>([]);
   const [search, setSearch] = useState('');
-
   const animeRef = collection(db, 'anime');
   const DEFAULT_IMAGE = './img/Twitter.jpg';
   /* ================= FETCH ================= */
@@ -100,7 +99,18 @@ const [userSearch, setUserSearch] = useState("");
 
     return () => unsub();
   }, []);
+useEffect(() => {
+  const unsub = onSnapshot(collection(db, "vip_requests"), (snap) => {
+    setVipRequests(
+      snap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }))
+    );
+  });
 
+  return () => unsub();
+}, []);
   useEffect(() => {
     const fetchUsers = async () => {
       const snap = await getDocs(collection(db, 'users'));
@@ -332,6 +342,9 @@ const uploadVideo = async (file: File) => {
         <button onClick={() => setActive('users')} className="card">
           👥 Users
         </button>
+        <button onClick={() => setActive('vip_requests')} className="card">
+  👑 VIP Requests
+</button>
       </div>
       {/* ================= ADD / EDIT ANIME ================= */}
 
@@ -451,7 +464,9 @@ const uploadVideo = async (file: File) => {
               placeholder="Anime description..."
             />
           </div>
-
+<div>
+  
+</div>
           <button onClick={saveAnime} className="btn mt-5">
             {editId ? '💾 Update Anime' : '🚀 Save Anime'}
           </button>
@@ -696,6 +711,108 @@ const uploadVideo = async (file: File) => {
           </div>
         </Modal>
       )}
+      {/* VIP REQUESTS PANEL */}
+
+{active === 'vip_requests' && (
+  <Modal onClose={() => setActive(null)}>
+
+    <div className="flex items-center justify-between mb-8">
+
+      <div>
+        <h2 className="text-4xl font-black">
+          👑 VIP Requests
+        </h2>
+
+        <p className="text-gray-400 mt-2">
+          VIP so‘rovlarini qabul qilish paneli
+        </p>
+      </div>
+
+      <div className="px-5 py-3 rounded-2xl bg-pink-500/20 border border-pink-500 text-pink-300 font-bold">
+        {vip_requests.length} Requests
+      </div>
+
+    </div>
+
+    <div className="space-y-5 max-h-[70vh] overflow-y-auto">
+
+      {vip_requests.length === 0 && (
+        <div className="text-center py-20 text-gray-400 font-bold text-xl">
+          😴 VIP requests yo‘q
+        </div>
+      )}
+
+      {vip_requests.map((req: any) => (
+
+        <div
+          key={req.id}
+          className="rounded-[30px] border border-pink-500/20 bg-gradient-to-br from-[#111827] to-[#1f2937] p-6"
+        >
+
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+            <div>
+
+              <div className="flex items-center gap-4">
+
+                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center text-3xl font-black">
+                  {req.firstName?.charAt(0)}
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-black">
+                    {req.firstName} {req.lastName}
+                  </h3>
+
+                  <p className="text-gray-400 mt-1">
+                    {req.email}
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+
+              <button
+                onClick={async () => {
+
+                 await updateDoc(doc(db, "users", req.uid), {
+  role: "vip",
+});
+
+                  await deleteDoc(doc(db, "vip_requests", req.id));
+
+                }}
+                className="bg-gradient-to-r from-pink-500 to-purple-600 px-6 py-4 rounded-2xl font-black"
+              >
+                👑 Accept VIP
+              </button>
+
+              <button
+                onClick={async () => {
+
+                  await deleteDoc(doc(db, "vip_requests", req.id));
+
+                }}
+                className="bg-red-600 px-6 py-4 rounded-2xl font-black"
+              >
+                ❌ Reject
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </Modal>
+)}
       {/* USERS PANEL */}
 
       {active === 'users' && (

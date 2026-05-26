@@ -110,49 +110,92 @@ export default function GenrePage() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
 
-            {filtered.map((anime) => {
-              const rating = getRating(anime.score);
+         {filtered.map((anime) => {
+  const rating = getRating(anime.score);
 
-              return (
-                <div
-                  key={anime.id}
-                  className="rounded-2xl overflow-hidden bg-[#111] border border-white/10 hover:scale-105 transition"
-                >
+  return (
+    <Link key={anime.id} href={`/anime/${anime.id}`} className="group">
+      <div
+        className="
+          relative aspect-[2/3]
+          rounded-[2.5rem]
+          overflow-hidden
+          bg-[#050505]
+          border border-white/10
+          shadow-[0_15px_70px_rgba(0,0,0,0.9)]
+          transition-all duration-700
 
-                  <img
-                    src={
-                      anime.image ||
-                      "https://via.placeholder.com/300x400"
-                    }
-                    className="h-64 w-full object-cover"
-                  />
+          hover:scale-[1.04]
+          hover:-translate-y-3
+          hover:shadow-[0_35px_120px_rgba(255,0,120,0.25)]
+        "
+      >
+        {/* IMAGE */}
+        <img
+          src={anime.image || "https://via.placeholder.com/300x400"}
+          className="
+            w-full h-full object-cover
+            group-hover:scale-110
+            transition duration-700
+          "
+        />
 
-                  <div className="p-4">
+        {/* DARK OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                    <h2 className="font-bold text-lg">
-                      {anime.title}
-                    </h2>
+        {/* GLOW EFFECT */}
+        <div className="absolute -inset-[120px] opacity-0 group-hover:opacity-100 transition duration-700 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-cyan-500/20 blur-[120px]" />
 
-                    {/* RATING FIX */}
-                    <p className="text-sm text-gray-400">
-                      ⭐{" "}
-                      {rating !== null
-                        ? rating.toFixed(1)
-                        : "N/A"}
-                    </p>
+        {/* TOP BADGE */}
+        <div className="absolute top-4 right-4 px-3 py-1 rounded-xl bg-black/50 backdrop-blur-xl border border-white/10 text-[10px] font-bold tracking-widest uppercase">
+          {slug}
+        </div>
 
-                    <Link
-                      href={`/anime/${anime.id}`}
-                      className="text-blue-400 text-sm mt-2 block"
-                    >
-                      Ko‘rish →
-                    </Link>
+        {/* BOTTOM CONTENT */}
+        <div className="absolute bottom-0 left-0 right-0 p-5 z-20">
+          {/* RATING + GENRE */}
+          <div className="flex items-center gap-2 mb-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition duration-500">
+          
 
-                  </div>
+            <span className="text-white/20">|</span>
 
-                </div>
-              );
-            })}
+            <span className="text-white/60 text-xs uppercase tracking-widest">
+              {slug}
+            </span>
+          </div>
+
+          {/* BUTTON */}
+          <div
+            className="
+              opacity-0 group-hover:opacity-100
+              translate-y-6 group-hover:translate-y-0
+              transition duration-500
+            "
+          >
+            <div className="
+              w-full py-3 rounded-2xl
+              bg-white/90 text-black font-black text-sm
+              flex items-center justify-center
+              hover:bg-gradient-to-r hover:from-pink-500 hover:to-red-500 hover:text-white
+            ">
+              ▶ WATCH NOW
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TITLE */}
+      <h2 className="
+        mt-3 text-white font-bold text-sm sm:text-lg
+        line-clamp-2
+        group-hover:text-pink-500
+        transition
+      ">
+        {anime.title}
+      </h2>
+    </Link>
+  );
+})}
 
           </div>
         )}

@@ -264,52 +264,134 @@ export default function ProfilePage() {
             </div>
 
             {/* STATS */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
-
-              <h2 className="text-3xl font-black mb-6">
-                User Stats
-              </h2>
-
-              <div className="grid grid-cols-2 gap-5">
-
-                {/* COINS */}
-                <div className="bg-black/40 border border-white/10 rounded-2xl p-6 text-center">
-
-                  <FaGem className="mx-auto text-5xl text-cyan-400 mb-4" />
-
-                  <p className="text-gray-400 text-lg">
-                    Coins
-                  </p>
-
-                  <h3 className="text-4xl font-black mt-2">
-                    {data?.coins || 0}
-                  </h3>
-
-                </div>
-
-                {/* LEVEL */}
-                <div className="bg-black/40 border border-white/10 rounded-2xl p-6 text-center">
-
-                  <FaFire className="mx-auto text-5xl text-orange-400 mb-4" />
-
-                  <p className="text-gray-400 text-lg">
-                    Level
-                  </p>
-
-                  <h3 className="text-4xl font-black mt-2">
-                    {data?.level || 1}
-                  </h3>
-
-                </div>
-
-              </div>
-            </div>
+   
 
           </div>
 
           {/* RIGHT SIDE */}
           <div className="space-y-6">
+{/* PREMIUM BALANCE CARD */}
+<div
+  className={`relative overflow-hidden rounded-3xl p-7 border shadow-2xl
 
+  ${
+    data?.role === "owner"
+      ? "border-yellow-400 bg-gradient-to-br from-yellow-500/20 via-orange-500/10 to-red-500/20"
+      : data?.role === "vip"
+      ? "border-pink-500 bg-gradient-to-br from-pink-500/20 via-purple-500/10 to-indigo-500/20"
+      : "border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 to-blue-500/10"
+  }`}
+>
+
+  {/* GLOW */}
+  <div className="absolute -top-20 -right-20 w-52 h-52 bg-white/10 blur-3xl rounded-full"></div>
+
+  {/* TOP */}
+  <div className="relative flex items-center justify-between">
+
+    <div>
+      <p className="text-white/50 text-sm uppercase tracking-[3px]">
+        Wallet Balance
+      </p>
+
+      <h2 className="text-5xl font-black mt-3">
+        ${(data?.coins || 0).toLocaleString()}
+      </h2>
+
+      <p className="text-white/40 mt-2">
+        Premium account balance
+      </p>
+    </div>
+
+    {/* ICON */}
+    <div
+      className={`w-24 h-24 rounded-3xl flex items-center justify-center text-5xl shadow-2xl
+
+      ${
+        data?.role === "owner"
+          ? "bg-yellow-500/20 text-yellow-300"
+          : data?.role === "vip"
+          ? "bg-pink-500/20 text-pink-300"
+          : "bg-cyan-500/20 text-cyan-300"
+      }`}
+    >
+      💎
+    </div>
+
+  </div>
+
+  {/* ACTION BUTTONS */}
+  <div className="relative grid grid-cols-2 gap-4 mt-8">
+
+    {/* TOP UP */}
+    <button
+      onClick={() => router.push("/payment")}
+      className="group relative overflow-hidden rounded-2xl py-4 font-bold transition-all active:scale-95"
+    >
+
+      <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 group-hover:scale-105 transition-all"></div>
+
+      <div className="relative flex items-center justify-center gap-3 text-white text-lg">
+        💰 Balance To‘ldirish
+      </div>
+
+    </button>
+
+    {/* VIP */}
+    <button
+      onClick={() => router.push("/vip")}
+      className="group relative overflow-hidden rounded-2xl py-4 font-bold transition-all active:scale-95"
+    >
+
+      <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-600 group-hover:scale-105 transition-all"></div>
+
+      <div className="relative flex items-center justify-center gap-3 text-white text-lg">
+        👑 VIP Upgrade
+      </div>
+
+    </button>
+
+  </div>
+
+  {/* BONUS INFO */}
+  <div className="relative mt-7 grid md:grid-cols-3 gap-4">
+
+    <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+      <p className="text-white/50 text-sm">
+        Daily Bonus
+      </p>
+
+      <h3 className="text-2xl font-black mt-2">
+        +50 Coins
+      </h3>
+    </div>
+
+    <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+      <p className="text-white/50 text-sm">
+        Premium Status
+      </p>
+
+      <h3 className="text-2xl font-black mt-2">
+        {data?.role === "owner"
+          ? "OWNER"
+          : data?.role === "vip"
+          ? "VIP"
+          : "FREE"}
+      </h3>
+    </div>
+
+    <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+      <p className="text-white/50 text-sm">
+        Next Reward
+      </p>
+
+      <h3 className="text-2xl font-black mt-2">
+        🔥 Lv {(data?.level || 1) + 1}
+      </h3>
+    </div>
+
+  </div>
+</div>
             {/* FEATURES */}
             <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
 
@@ -357,24 +439,9 @@ export default function ProfilePage() {
       onClick={() => router.push("/admin/login")}
       className="w-full bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-400 rounded-2xl p-4 text-left transition-all duration-300"
     >
-      🛠 Full Admin Panel
+      🛠Admin Panel
     </button>
 
-    <div className="bg-yellow-500/20 border border-yellow-400 rounded-2xl p-4">
-      📊 User Statistics
-    </div>
-
-    <div className="bg-yellow-500/20 border border-yellow-400 rounded-2xl p-4">
-      🎬 Manage All Anime
-    </div>
-
-    <div className="bg-yellow-500/20 border border-yellow-400 rounded-2xl p-4">
-      🚀 Full Website Control
-    </div>
-
-    <div className="bg-yellow-500/20 border border-yellow-400 rounded-2xl p-4">
-      👑 Owner Special Badge
-    </div>
   </>
 )}
 
