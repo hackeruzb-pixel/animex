@@ -34,6 +34,7 @@ type Anime = {
   views: number;
   rating?: number;
   year?: number;
+    vip?: boolean;
   episodeList?: Episode[];
 };
 
@@ -77,7 +78,7 @@ const [uploading, setUploading] = useState(false);
   const [editingEpisodeIndex, setEditingEpisodeIndex] = useState<number | null>(
     null,
   );
-
+const [vip, setVip] = useState(false);
   const [animeList, setAnimeList] = useState<Anime[]>([]);
 const [userSearch, setUserSearch] = useState("");
   const [users, setUsers] = useState<UserType[]>([]);
@@ -178,31 +179,33 @@ const uploadVideo = async (file: File) => {
     const finalImage = image || DEFAULT_IMAGE;
 
     if (editId) {
-      await updateDoc(doc(db, 'anime', editId), {
-        title,
-        image: finalImage,
-        description,
-        episodes,
-        genre,
-        status,
-        rating,
-        year, // ⭐
-      });
-    } else {
-      await addDoc(animeRef, {
-        title,
-        image: finalImage,
-        description,
-        episodes,
-        genre,
-        status,
-        views: 0,
-        rating: 5,
-        year,
-        episodeList: [],
-        createdAt: Date.now(),
-      });
-    }
+  await updateDoc(doc(db, 'anime', editId), {
+    title,
+    image: finalImage,
+    description,
+    episodes,
+    genre,
+    status,
+    rating,
+    year,
+    vip,
+  });
+} else {
+  await addDoc(animeRef, {
+    title,
+    image: finalImage,
+    description,
+    episodes,
+    genre,
+    status,
+    views: 0,
+    rating: 5,
+    year,
+    vip,
+    episodeList: [],
+    createdAt: Date.now(),
+  });
+}
 
     resetForm();
   };
@@ -219,6 +222,7 @@ const uploadVideo = async (file: File) => {
     setGenre(a.genre);
     setStatus(a.status);
     setYear(a.year || 2026);
+    setVip(a.vip || false);
     setEditId(a.id || null);
 
     setActive('add');
@@ -277,6 +281,7 @@ const uploadVideo = async (file: File) => {
     setGenre([]);
     setStatus('');
     setYear(2026);
+    setVip(false);
     setRating(5);
     setEditId(null);
     setActive(null);
@@ -372,7 +377,7 @@ const uploadVideo = async (file: File) => {
   <p className="mb-2 text-gray-400 font-semibold">Genre</p>
 
   <div className="grid grid-cols-2 gap-2">
-    {["Action", "Fantasy", "Romance", "Drama", "Comedy", "Horror"].map((g) => (
+    {["Action", "Fantasy", "Romance", "Drama", "Comedy", "Echchi", "Horror"].map((g) => (
       <label
         key={g}
         className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10 transition"
@@ -452,7 +457,29 @@ const uploadVideo = async (file: File) => {
               />
             </div>
           </div>
+{/* VIP */}
+<div className="mt-5">
+  <label className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 cursor-pointer">
 
+    <input
+      type="checkbox"
+      checked={vip}
+      onChange={(e) => setVip(e.target.checked)}
+      className="w-5 h-5 accent-yellow-500"
+    />
+
+    <div>
+      <p className="font-black text-yellow-400">
+        👑 VIP Anime
+      </p>
+
+      <p className="text-sm text-gray-400">
+        Belgilansa anime VIP bo‘limga tushadi
+      </p>
+    </div>
+
+  </label>
+</div>
           {/* DESCRIPTION */}
           <div className="mt-5">
             <p className="mb-2 text-gray-400 font-semibold">Description</p>
@@ -464,6 +491,7 @@ const uploadVideo = async (file: File) => {
               placeholder="Anime description..."
             />
           </div>
+
 <div>
   
 </div>

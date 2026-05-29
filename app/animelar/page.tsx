@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./../lib/firebase";
-
+import Link from "next/link";
 type Anime = {
   id: string;
   title: string;
@@ -105,7 +105,11 @@ export default function AnimePage() {
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
         {filteredAnime.map((item) => (
-          <div key={item.id} className="group">
+         <Link
+  href={`/anime/${item.id}`}
+  key={item.id}
+  className="group block"
+>
             {/* CARD */}
             <div
               className="
@@ -175,7 +179,7 @@ export default function AnimePage() {
             ">
               {item.title}
             </h3>
-          </div>
+          </Link>
         ))}
       </div>
 

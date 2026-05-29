@@ -21,6 +21,7 @@ type Anime = {
   id?: string;
   title?: string;
   genre?: any;
+  vip?: boolean;
 };
 
 const genresList = [
@@ -106,13 +107,16 @@ export default function GenresPage() {
 
   /* ================= COUNT ================= */
 
-  const getCount = (slug: string) => {
-    return animeList.filter((anime) => {
-      const genres = normalizeGenres(anime.genre);
-      return genres.includes(slug.toLowerCase());
-    }).length;
-  };
+const getCount = (slug: string) => {
+  return animeList.filter((anime) => {
+    // 👑 VIP anime chiqmaydi
+    if (anime.vip) return false;
 
+    const genres = normalizeGenres(anime.genre);
+
+    return genres.includes(slug.toLowerCase());
+  }).length;
+};
   return (
     <main className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />

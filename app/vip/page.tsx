@@ -52,8 +52,7 @@ const [checking, setChecking] = useState(true);
     } finally {
       setLoading(false);
     }
-  };
-useEffect(() => {
+  };useEffect(() => {
   const unsub = onAuthStateChanged(auth, async (user) => {
     if (!user) {
       router.push("/login");
@@ -65,7 +64,19 @@ useEffect(() => {
 
     if (snap.exists()) {
       const data = snap.data();
-      setIsVip(data.vip === true || data.role === "vip");
+
+      const vipUser =
+        data.vip === true ||
+        data.role === "vip" ||
+        data.role === "owner";
+
+      setIsVip(vipUser);
+
+      // 👑 VIP user bo‘lsa animevip ga yuboradi
+      if (vipUser) {
+        router.push("/vipanime");
+      }
+
     } else {
       setIsVip(false);
     }
@@ -75,36 +86,8 @@ useEffect(() => {
 
   return () => unsub();
 }, [router]);
-if (checking) {
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
-      Loading...
-    </main>
-  );
-}
 
-if (isVip) {
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
-      <div className="text-center">
-        <FaCrown className="text-yellow-400 text-6xl mx-auto" />
-        <h1 className="text-4xl font-bold mt-4">
-          Siz VIP foydalanuvchisiz 👑
-        </h1>
-        <p className="text-white/60 mt-2">
-          Premium kontentlarga kirish ochilgan.
-        </p>
 
-        <button
-          onClick={() => router.push("/")}
-          className="mt-6 px-6 py-3 bg-yellow-500 text-black rounded-xl font-bold"
-        >
-          Bosh sahifaga
-        </button>
-      </div>
-    </main>
-  );
-}
   return (
     <main className="min-h-screen bg-black text-white overflow-hidden relative">
 

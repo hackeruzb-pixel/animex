@@ -26,6 +26,7 @@ interface Anime {
   episodes?: number;
   views?: number;
   image?: string;
+   vip?: boolean;
   year?: number;
   images?: {
     jpg: {
@@ -62,14 +63,13 @@ export default function Home() {
   );
 }
 function HomeContent() {
-  const [apiAnime, setApiAnime] = useState<Anime[]>([]);
-
+ 
   const [firebaseAnime, setFirebaseAnime] = useState<Anime[]>([]);
 
   const [search, setSearch] = useState('');
 
   const [loading, setLoading] = useState(true);
-
+ const [animeList, setAnimeList] = useState<Anime[]>([]);
   const [banned, setBanned] = useState(false);
 
   const [userRole, setUserRole] = useState('');
@@ -110,7 +110,18 @@ function HomeContent() {
 
     return () => unsub();
   }, []);
+ useEffect(() => {
+    const unsub = onSnapshot(collection(db, "anime"), (snapshot) => {
+      const data: Anime[] = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Anime, "id">),
+      }));
 
+      setAnimeList(data);
+    });
+
+    return () => unsub();
+  }, []);
   /* ================= API ================= */
 
   /* ================= FIREBASE ================= */
@@ -134,10 +145,13 @@ function HomeContent() {
 
   const allAnime = firebaseAnime;
   /* ================= SEARCH ================= */
+const filteredAnime = animeList.filter((a) => {
+  const matchesSearch = (a.title || "")
+    .toLowerCase()
+    .includes(search.toLowerCase());
 
-  const filteredAnime = allAnime.filter((item) =>
-    (item.title ?? '').toLowerCase().includes(search.toLowerCase().trim()),
-  );
+  return matchesSearch && !a.vip;
+});
 
   /* ================= BANNED SCREEN ================= */
 

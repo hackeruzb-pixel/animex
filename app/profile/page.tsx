@@ -101,7 +101,7 @@ export default function ProfilePage() {
 
         {/* TOP BANNER */}
      <div
-  className={`relative min-h-[420px] md:min-h-[500px] flex items-center justify-center overflow-hidden
+  className={`relative min-h-[320px] md:min-h-[500px] flex items-center justify-center overflow-hidden
           ${
             data?.role === "owner"
               ? "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600"
@@ -139,7 +139,7 @@ export default function ProfilePage() {
             </div>
 
             {/* NAME */}
-            <h1 className="text-5xl font-black mt-5 tracking-wide">
+            <h1 className="text-3xl md:text-5xl font-black mt-5 tracking-wide px-4 break-words">
               {data?.firstName} {data?.lastName}
             </h1>
 
@@ -148,7 +148,7 @@ export default function ProfilePage() {
 
               {/* OWNER */}
               {data?.role === "owner" && (
-                <div className="px-7 py-3 rounded-full bg-black border-2 border-yellow-400 text-yellow-300 font-black flex items-center gap-3 shadow-[0_0_35px_gold] animate-pulse">
+                <div className="px-4 md:px-7 py-2 md:py-3 text-sm md:text-base rounded-full bg-black border-2 border-yellow-400 text-yellow-300 font-black flex items-center gap-3 shadow-[0_0_35px_gold] animate-pulse">
 
                   <FaUserShield className="text-2xl" />
 
@@ -186,7 +186,7 @@ export default function ProfilePage() {
         </div>
 
         {/* CONTENT */}
-        <div className="grid md:grid-cols-2 gap-7 p-8">
+        <div className="grid md:grid-cols-2 gap-5 p-4 md:p-8">
 
           {/* LEFT SIDE */}
           <div className="space-y-6">
